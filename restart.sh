@@ -110,9 +110,11 @@ elif [[ "$1" == "--restartFirefox" ]]; then
   done
 
   elif [[ "$1" == "--restartURnetwork" ]]; then
-  # Restarting URnetwork Nodes
-  for container in `cat containernames.txt | grep ^urnetwork`
-  do
-    docker restart $container
-  done
+  echo "Restarting URnetwork Nodes (tun)..."
+  grep '^tun' containernames.txt | xargs -r -I {} -P20 docker restart "{}"
+
+  sleep 10
+
+  echo "Restarting URnetwork Nodes (urnetwork)..."
+  grep '^urnetwork' containernames.txt | xargs -r -I {} -P20 docker restart "{}"
 fi
