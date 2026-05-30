@@ -1004,12 +1004,12 @@ start_containers() {
   if [[ $UR_AUTH_TOKEN ]]; then
     echo -e "${YELLOW}Starting URnetwork container..${NOCOLOUR}"
     if [ "$container_pulled" = false ]; then
-      sudo docker pull URnetworkImage
+      sudo docker pull $URnetworkImage
       # Create URnetwork folder
       mkdir -p $PWD/$urnetwork_data_folder/data/.urnetwork
       sudo chmod -R 777 $PWD/$urnetwork_data_folder/data/.urnetwork
       if [ ! -f "$PWD/$urnetwork_data_folder/data/.urnetwork/jwt" ]; then
-        sudo docker run --rm $DNS_VOLUME $NETWORK_TUN --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork --entrypoint /usr/local/sbin/bringyour-provider URnetworkImage auth $UR_AUTH_TOKEN
+        sudo docker run --rm $DNS_VOLUME $NETWORK_TUN --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork --entrypoint /usr/local/sbin/bringyour-provider $URnetworkImage auth $UR_AUTH_TOKEN
         sleep 1
         if [ ! -f "$PWD/$urnetwork_data_folder/data/.urnetwork/jwt" ]; then
           echo -e "${RED}JWT file could not be generated for URnetwork. Exiting..${NOCOLOUR}"
@@ -1053,14 +1053,14 @@ start_containers() {
           exit 1
         fi
 	    # Generate proxy file using urnetwork
-	    sudo docker run --rm $DNS_VOLUME --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork --mount type=bind,source="$PWD/$ur_proxies_file",target=/root/ur_proxy.txt URnetworkImage proxy add --proxy_file=/root/ur_proxy.txt
+	    sudo docker run --rm $DNS_VOLUME --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork --mount type=bind,source="$PWD/$ur_proxies_file",target=/root/ur_proxy.txt $URnetworkImage proxy add --proxy_file=/root/ur_proxy.txt
 	    sleep 1
 	    if [ ! -f "$PWD/$urnetwork_data_folder/data/.urnetwork/proxy" ]; then
           echo -e "${RED}Proxy file could not be generated for URnetwork. Exiting..${NOCOLOUR}"
           exit 1
         fi
         check_container_exists urnetwork$UNIQUE_ID$i
-        if CONTAINER_ID=$(sudo docker run -d --name urnetwork$UNIQUE_ID$i --restart=always $LOGS_PARAM $DNS_VOLUME --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork URnetworkImage provide); then
+        if CONTAINER_ID=$(sudo docker run -d --name urnetwork$UNIQUE_ID$i --restart=always $LOGS_PARAM $DNS_VOLUME --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork $URnetworkImage provide); then
           echo -e "${GREEN}Container urnetwork$UNIQUE_ID$i started successfully.${NOCOLOUR}"
         else
           echo -e "${RED}Failed to start container for URnetwork. Exiting..${NOCOLOUR}"
@@ -1078,7 +1078,7 @@ start_containers() {
     fi
     if [ "$UR_NETWORK_PROXY_MODE" != true ]; then
       check_container_exists urnetwork$UNIQUE_ID$i
-      if CONTAINER_ID=$(sudo docker run -d --name urnetwork$UNIQUE_ID$i --restart=always $NETWORK_TUN $LOGS_PARAM $DNS_VOLUME --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork URnetworkImage provide); then
+      if CONTAINER_ID=$(sudo docker run -d --name urnetwork$UNIQUE_ID$i --restart=always $NETWORK_TUN $LOGS_PARAM $DNS_VOLUME --mount type=bind,source="$PWD/$urnetwork_data_folder/data/.urnetwork",target=/root/.urnetwork $URnetworkImage provide); then
         echo -e "${GREEN}Container urnetwork$UNIQUE_ID$i started successfully.${NOCOLOUR}"
       else
         echo -e "${RED}Failed to start container for URnetwork. Exiting..${NOCOLOUR}"
