@@ -1000,7 +1000,7 @@ start_containers() {
   fi
 
   # Starting URnetwork container
-  URnetworkImage="bringyour/community-provider:2026.5.14-940114380"
+  URnetworkImage="bringyour/community-provider:2026.4.14-914247230"
   if [[ $UR_AUTH_TOKEN ]]; then
     echo -e "${YELLOW}Starting URnetwork container..${NOCOLOUR}"
     if [ "$container_pulled" = false ]; then
