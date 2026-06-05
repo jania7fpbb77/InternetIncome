@@ -1068,7 +1068,7 @@ start_containers() {
         fi
       else
         check_container_exists dindurnetwork$UNIQUE_ID$i
-        if CONTAINER_ID=$(sudo docker run -d --name dindurnetwork$UNIQUE_ID$i $LOGS_PARAM $DNS_VOLUME --restart=always --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --mount type=bind,source=$(which docker),target=/usr/bin/docker --mount type=bind,source=$PWD,target=/urnetwork docker:18.06.2-dind /bin/sh -c 'apk add --no-cache bash && cd /urnetwork && chmod +x /urnetwork/restart.sh && while true; do sleep 72000; /urnetwork/restart.sh --restartURnetwork; done'); then
+        if CONTAINER_ID=$(sudo docker run -d --name dindurnetwork$UNIQUE_ID$i $LOGS_PARAM $DNS_VOLUME --restart=always --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --mount type=bind,source=$(which docker),target=/usr/bin/docker --mount type=bind,source=$PWD,target=/urnetwork docker:18.06.2-dind /bin/sh -c 'apk add --no-cache bash && cd /urnetwork && chmod +x /urnetwork/restart.sh && while true; do sleep 64800; /urnetwork/restart.sh --restartURnetwork; done'); then
           echo -e "${GREEN}Container dindurnetwork$UNIQUE_ID$i started successfully.${NOCOLOUR}"
         else
           echo -e "${RED}Failed to start container for URnetwork restart. Exiting..${NOCOLOUR}"
